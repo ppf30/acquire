@@ -1,0 +1,20 @@
+{
+  "name": "acquire",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/ppf30/acquire#readme",
+  "bugs": {
+    "url": "https://github.com/ppf30/acquire/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ppf30/acquire.git"
+  },
+  "license": "ISC",
+  "author": "Patricia Perez",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
