@@ -1,5 +1,5 @@
 // controllers/acquireController.js
-const { getModelInfo, predict } = require("../services/kunnaService");
+const { fetchKunna } = require("../services/kunnaService");
 
 // health endpoint
 function health(req, res) {
@@ -11,77 +11,37 @@ function health(req, res) {
 
 
 // data endpoint
-function ready(req, res) {
-  const info = getModelInfo();
-
-  if (!info.ready) {
-    return res.status(503).json({
-      ready: false,
-      modelVersion: info.modelVersion,
-      message: "Model is still loading"
-    });
-  }
-
-  res.json({
-    ready: true,
-    modelVersion: info.modelVersion
-  });
-}
-
-async function doPredict(req, res) {
-  const start = Date.now();
-
+async function data(req, res) {
   try {
-    const info = getModelInfo();
-    if (!info.ready) {
-      return res.status(503).json({
-        error: "Model not ready",
-        ready: false
-      });
+    const { timeStart, timeEnd } = req.query;
+
+    const start = timeStart ? new Date(timeStart) : new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const end   = timeEnd   ? new Date(timeEnd)   : new Date();
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      return res.status(400).json({ error: "INVALID_DATE_FORMAT" });
     }
 
-    const { features, meta } = req.body;
+    // Llama al servicio (que llama a Kunna)
+    const result = await fetchKunna(start, end); // aquí se conecta a Kunna
 
-    if (!features) {
-      return res.status(400).json({ error: "Missing features" });
-    }
-    if (!meta || typeof meta !== "object") {
-      return res.status(400).json({ error: "Missing meta object" });
-    }
-
-    const { featureCount } = meta;
-
-    if (featureCount !== info.inputDim) {
-      return res.status(400).json({
-        error: `featureCount must be ${info.inputDim}, received ${featureCount}`
-      });
-    }
-
-    if (!Array.isArray(features) || features.length !== info.inputDim) {
-      return res.status(400).json({
-        error: `features must be an array of ${info.inputDim} numbers`
-      });
-    }
-
-    const prediction = await predict(features);
-    const latencyMs = Date.now() - start;
-    const timestamp = new Date().toISOString();
-
-    // De momento sin MongoDB → predictionId null
-    res.status(201).json({
-      predictionId: null,
-      prediction,
-      timestamp,
-      latencyMs
+    return res.json({
+      status: "ok",
+      from: start.toISOString(),
+      to: end.toISOString(),
+      data: result  // { columns, values }
     });
+
   } catch (err) {
-    console.error("Error en /predict:", err);
-    res.status(500).json({ error: "Internal error" });
+    console.error("DATA_ENDPOINT_ERROR:", err);
+    return res.status(500).json({
+      error: "DATA_FETCH_ERROR",
+      detail: err.message
+    });
   }
 }
 
 module.exports = {
   health,
-  ready,
-  doPredict
+  data
 };
