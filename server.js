@@ -1,19 +1,28 @@
+// server.js
+// Entry point del servicio PREDICT
+require("dotenv").config();
+
 const express = require("express");
-const acquireRoutes = require("./routes/acquireRoutes");
-const connectDB = require("./model/database");
-
 const app = express();
+const path = require("path");
+const mongoose = require("mongoose");
+const acquireRoutes = require("./routes/acquireRoutes");
+const PORT = process.env.PORT || 3001;
 
-// Conectar a MongoDB antes de levantar el servicio
-connectDB();
 
 app.use(express.json());
 
-// Rutas del servicio acquire
+// Conectamos a MongoDB
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB conectado (ACQUIRE)"))
+  .catch((err) => {
+    console.error("Error al conectar a MongoDB:", err);
+    process.exit(1);
+  });
+
 app.use("/", acquireRoutes);
 
-const PORT = process.env.PORT || 3001;
-
 app.listen(PORT, () => {
-  console.log(`Acquire service running on port ${PORT}`);
+  console.log("ACQUIRE escuchando en http://localhost:${PORT}");
 });
