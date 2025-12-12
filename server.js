@@ -24,5 +24,5 @@ mongoose
 app.use("/", acquireRoutes);
 
 app.listen(PORT, () => {
-  console.log("ACQUIRE escuchando en http://localhost:${PORT}");
+  console.log(`ACQUIRE escuchando en http://localhost:${PORT}`);
 });
