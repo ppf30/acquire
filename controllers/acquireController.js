@@ -5,7 +5,7 @@ const { fetchKunna } = require("../services/kunnaService");
 function health(req, res) {
   res.json({
     status: "ok",
-    service: "predict"
+    service: "acquire"
   });
 }
 

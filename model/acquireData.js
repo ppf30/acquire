@@ -4,7 +4,7 @@ async function connectDB() {
   const mongoUri = process.env.MONGO_URI;
 
   if (!mongoUri) {
-    console.error("❌ MONGO_URI no está definido");
+    console.error("MONGO_URI no está definido");
     process.exit(1);
   }
 
@@ -15,7 +15,7 @@ async function connectDB() {
 
     console.log("✅ MongoDB connected:", mongoUri);
   } catch (error) {
-    console.error("❌ MongoDB connection error:", error);
+    console.error("MongoDB connection error:", error);
     process.exit(1);
   }
 }
