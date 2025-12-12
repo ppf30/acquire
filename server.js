@@ -1,5 +1,5 @@
 // server.js
-// Entry point del servicio PREDICT
+// Entry point del servicio ACQUIRE
 require("dotenv").config();
 
 const express = require("express");
