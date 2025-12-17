@@ -1,3 +1,4 @@
+//data/acquireData.js
 const mongoose = require("mongoose");
 
 const AcquiredDataSchema = new mongoose.Schema({

@@ -14,14 +14,12 @@ app.use(express.json());
 // Función de arranque
 const startServer = async () => {
   try {
-    // 1. Conectar a MongoDB (bloqueante)
     await connectDB();
     console.log("MongoDB conectado (ACQUIRE)");
 
-    // 2. Registrar rutas SOLO después de conectar
     app.use("/", acquireRoutes);
 
-    // 3. Levantar servidor
+
     app.listen(PORT, () => {
       console.log(`ACQUIRE escuchando en http://localhost:${PORT}`);
     });
