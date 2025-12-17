@@ -16,10 +16,10 @@ const startServer = async () => {
   try {
     await connectDB();
     console.log("MongoDB conectado (ACQUIRE)");
-
+    
     app.use("/", acquireRoutes);
 
-
+   
     app.listen(PORT, () => {
       console.log(`ACQUIRE escuchando en http://localhost:${PORT}`);
     });

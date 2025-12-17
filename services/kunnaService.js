@@ -1,6 +1,7 @@
+
 const KUNNA_URL = "https://openapi.kunna.es/data/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NjM2NDEwNjB9.ixb4O5Jgk-e_oPMSsycpD7A_iGVqIl4Ijl2a_kLrT94";
 
-// alias fijo del contador
+// alias fijo del contador (ya no usamos uid)
 const ALIAS = "6339651";
 
 /**
@@ -28,23 +29,22 @@ async function fetchKunna(timeStart, timeEnd) {
 
   const response = await fetch(url, {
     method: "POST",
-    headers,
+    headers: headers,
     body: JSON.stringify(body)
   });
 
   if (!response.ok) {
-    throw new Error(`KUNNA_BAD_STATUS: ${response.status}`);
+    throw new Error(`KUNNA_BAD_STATUS:${response.status}`);
   }
 
   const json = await response.json();
+  const result = json.result;
 
-  if (!json.result || 
-      !Array.isArray(json.result.columns) || 
-      !Array.isArray(json.result.values)) {
+  if (!result || !Array.isArray(result.columns) || !Array.isArray(result.values)) {
     throw new Error("KUNNA_INVALID_RESULT");
   }
 
-  return json.result; // { columns, values }
+  return result; // { columns, values }
 }
 
 module.exports = { fetchKunna };
