@@ -1,6 +1,5 @@
 // controllers/acquireController.js
 const { fetchKunna } = require("../services/kunnaService");
-
 const AcquiredData = require("../data/acquireData"); 
 
 // Constantes

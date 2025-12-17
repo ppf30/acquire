@@ -6,7 +6,7 @@ const connectDB = async () => {
     throw new Error("MONGO_URI no está definida");
   }
 
-  await mongoose.connect(process.env.MONGO_URI);
+  await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/prediction");
   console.log("MongoDB conectado correctamente");
 };
 
