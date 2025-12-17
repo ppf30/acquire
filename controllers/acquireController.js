@@ -90,21 +90,9 @@ try {
     });
 
    } catch (err) {
-     console.error("DATA_ENDPOINT_ERROR:", err);
-
-    let statusCode = 500;
-    if (err.message.includes("KUNNA_BAD_STATUS")) {
-        statusCode = 502; 
-    } else if (err.message.includes("TIMEOUT")) {
-        statusCode = 504; 
+        console.error("[ACQUIRE] Error:", err.message);
+        res.status(500).json({ error: err.message });
     }
-    
-     return res.status(statusCode).json({
-      error: "ACQUIRE_PROCESS_ERROR",
-      message: "Error al procesar, transformar o guardar los datos.",
-      detail: err.message
-    });
-  }
 }
 
 module.exports = {
